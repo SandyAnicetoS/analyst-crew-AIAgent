@@ -1,0 +1,76 @@
+task_identify_and_read_sheets:
+  description: >
+    Use a ferramenta Read Spreadsheet Tool para compreender os arquivos .xlsx a serem processados.
+    Você terá as informações de múltiplos arquivos, cada um contendo dados de colaboradores, ferramentas ou benefícios.
+    Estas informações, de cada planilha, serão:
+      - Nome do arquivo .xlsx
+      - Uma lista com o nome das colunas 
+      - Duas linhas da planilha como exemplo
+
+    Você deverá:
+      1. Identificar e compreender o nome do arquivo
+      2. Identificar e compreender as colunas de cada planilha
+      3. Identificar e compreender as duas linhas de exemplo para melher entendimento dos dados
+
+    Com estas informações, identifique se a planilha contém os dados dos colaboradores, das ferramentas ou dos benefícios.
+    
+    Para a planilha identificada como sendo a dos dados dos colaboradores, faça o seguinte:
+      - Entenda o nome das colunas, a informação que representa e padronize os nomes para facilitar a análise e manipulação posterior.
+        - As colunas padronizadas devem ser: 'nome_colaborador', 'ID_colaborador', 'departamento', 'salario'.
+        - Representando, respectivamente: o nome do colaborador, o documento do colaborador, o departamento do colaborador e o salário do colaborador.
+        - As colunas podem conter variações como 'nome', 'cpf', 'departamento', 'salário', etc.
+        - Outras colunas que possam existir, podem ser ignoradas.
+      - Monte um dicionário na seguinte estrutura:
+        {'file_name': 'Nome do arquivo.xlsx',
+         'columns': {
+          'nome_antigo_da_coluna': 'nome_novo_padronizado',
+        }
+    
+    Para a planilha identificada como sendo a dos dados das ferramentas ou benefícios, faça o seguinte:
+      - Entenda o nome das colunas, a informação que representa e padronize os nomes para facilitar a análise e manipulação posterior.
+        - As colunas devem ser: 'nome_colaborador', 'ID_colaborador', 'custo_total_X'.
+        - Representando, respectivamente: o nome do colaborador, o documento do colaborador e o custo total da ferramenta ou benefício.
+        - As colunas podem conter variações como: 'assinante' ou 'beneficiário', 'cpf' ou 'documento', 'custo' ou 'valor mensal' ou 'total', etc.
+        - Normalmente a coluna do custo total é a última da planilha.
+        - Outras colunas que possam existir, podem ser ignoradas.
+      - Entenda também o nome do arquivo e sugira um nome específico para nomear a ferramenta ou benefício. Por exemplo:
+        - Se o nome do arquivo for 'Ferramenta 1 - Github.xlsx', o nome da ferramenta deverá ser 'Github'. Não invente nomes, use o nome do arquivo.
+        - Esse mome deverá ser usado no nome da coluna custo_total_X, onde X é o nome, por exemplo: 'custo_total_github'.
+      - Monte um dicionário na seguinte estrutura:
+        {'file_name': 'Nome do arquivo.xlsx',
+         'columns': {
+            'nome_antigo_da_coluna': 'nome_novo_padronizado',
+          }
+        }
+    Retorne uma lista com os dicionários de colaboradores, ferramentas e benefícios.
+    Será uma planilha de colaboradores e várias planilhas de ferramentas e benefícios.
+  expected_output: >
+    Uma lista no seguinte formato:
+    [
+      {
+        'file_name': 'Nome do arquivo.xlsx',
+        'columns': {
+          'nome_antigo_da_coluna': 'nome_novo_padronizado',
+          'outra_coluna_antiga': 'outra_coluna_nova_padronizada',
+          ...
+        }
+      },
+      ...
+    ]
+  agent: file_processor_agent
+
+task_process_and_save_data:
+  description: >
+    Compreenda a lista de informações padronizadas geradas na tarefa anterior.
+    Passe esta informação como entrada para a ferramenta Process Spreadsheet Tool.
+    Garanta que esta entrada estará no formato correto, conforme a estrutura de dicionários que você gerou na tarefa anterior.
+    A ferramenta Process Spreadsheet Tool irá:
+      1. Receber como entrada a lista de dicionários com as informações padronizadas que você passará.
+      2. Ler os arquivos .xlsx de colaboradores, ferramentas e benefícios.
+      3. Fazer as manipulações e junções necessárias dos arquivos.
+      4. Calcular o custo total.
+      5. Salvar o resultado em um arquivo Excel chamado 'relatorio_custos.xlsx'.
+  expected_output: >
+    Um arquivo Excel chamado 'relatorio_custos.xlsx' contendo os dados do resultado.
+  agent: data_processor_agent
+

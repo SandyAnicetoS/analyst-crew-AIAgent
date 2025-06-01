@@ -13,7 +13,7 @@ Este projeto utiliza o framework [crewAI](https://crewai.com) para orquestrar m√
 
 ### Diagrama
 
-![Diagrama](images\diagrama.png)
+![Diagrama](images/diagrama.png)
 
 ## Como Executar
 
